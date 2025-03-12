@@ -48,3 +48,26 @@ li {
   border: 1px solid #ddd;
   border-radius: 5px;
 }
+
+/* Estilos para ingresos y gastos */
+.income-form, .expense-form {
+  margin-bottom: 20px;
+}
+
+.income-form input, .expense-form input {
+  margin-bottom: 10px;
+  padding: 8px;
+  width: 100%;
+}
+
+.income-list, .expense-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.income-list li, .expense-list li {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
