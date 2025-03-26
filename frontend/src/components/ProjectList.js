@@ -18,7 +18,7 @@ function ProjectList({ projects, editProject, deleteProject }) {
 
   return (
     <ul>
-      {projects.map(project => (
+      {projects?.map(project => (
         <li key={project.id}>
           {editingId === project.id ? (
             <>

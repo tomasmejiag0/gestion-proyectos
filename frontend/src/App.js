@@ -1,87 +1,65 @@
-import React, { useState } from 'react';
-import ProjectList from './components/ProjectList';
-import ProjectForm from './components/ProjectForm';
-import WorkerList from './components/WorkerList';
-import TaskForm from './components/TaskForm';
-import TaskList from './components/TaskList';
-import IncomeForm from './components/IncomeForm';
-import IncomeList from './components/IncomeList';
-import ExpenseForm from './components/ExpenseForm';
-import ExpenseList from './components/ExpenseList';
-import './App.css';
+import React, { useContext } from 'react'; // Añade useContext aquí
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, AuthContext } from './AuthContext';
+import LoginPage from './LoginPage';
+import AdminDashboard from './pages/AdminDashboard';
+import ManagerDashboard from './pages/ManagerDashboard';
+import ChiefDashboard from './pages/ChiefDashboard';
+import Layout from './Layout';
+
+// Componente para rutas protegidas
+const ProtectedRoute = ({ children, allowedRoles }) => {
+  const { user } = useContext(AuthContext);
+  
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  if (!allowedRoles.includes(user.role)) {
+    return <Navigate to="/" replace />;
+  }
+  
+  return children;
+};
 
 function App() {
-  const [projects, setProjects] = useState([]);
-  const [workers, setWorkers] = useState([]);
-  const [tasks, setTasks] = useState([]);
-  const [incomes, setIncomes] = useState([]);
-  const [expenses, setExpenses] = useState([]);
-
-  // Funciones para proyectos, trabajadores y tareas (ya existentes)
-  const addProject = (project) => {
-    setProjects([...projects, { ...project, id: Date.now() }]);
-  };
-
-  const editProject = (id, updatedProject) => {
-    setProjects(projects.map(project => project.id === id ? updatedProject : project));
-  };
-
-  const deleteProject = (id) => {
-    setProjects(projects.filter(project => project.id !== id));
-  };
-
-  const addWorker = (worker) => {
-    setWorkers([...workers, { ...worker, id: Date.now() }]);
-  };
-
-  const addTask = (task) => {
-    setTasks([...tasks, { ...task, id: Date.now(), status: 'Pendiente' }]);
-  };
-
-  const updateTaskStatus = (id, status) => {
-    setTasks(tasks.map(task => task.id === id ? { ...task, status } : task));
-  };
-
-  // Funciones para ingresos
-  const addIncome = (income) => {
-    setIncomes([...incomes, { ...income, id: Date.now() }]);
-  };
-
-  // Funciones para gastos
-  const addExpense = (expense) => {
-    setExpenses([...expenses, { ...expense, id: Date.now() }]);
-  };
-
   return (
-    <div className="App">
-      <h1>Gestión de Proyectos de Construcción</h1>
-      <div className="container">
-        <div className="section">
-          <h2>Proyectos</h2>
-          <ProjectForm addProject={addProject} />
-          <ProjectList projects={projects} editProject={editProject} deleteProject={deleteProject} />
-        </div>
-        <div className="section">
-          <h2>Trabajadores</h2>
-          <WorkerList workers={workers} addWorker={addWorker} />
-        </div>
-        <div className="section">
-          <h2>Tareas</h2>
-          <TaskForm workers={workers} addTask={addTask} />
-          <TaskList tasks={tasks} updateTaskStatus={updateTaskStatus} />
-        </div>
-        <div className="section">
-          <h2>Ingresos</h2>
-          <IncomeForm addIncome={addIncome} />
-          <IncomeList incomes={incomes} />
-        </div>
-        <div className="section">
-          <h2>Gastos</h2>
-          <ExpenseForm addExpense={addExpense} />
-          <ExpenseList expenses={expenses} />
-        </div>
-      </div>
-    </div>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route element={<Layout />}>
+            <Route path="/" element={
+              <ProtectedRoute allowedRoles={['admin', 'manager', 'chief']}>
+                {/* Página inicial según rol */}
+                <AuthContext.Consumer>
+                  {({ user }) => {
+                    if (user.role === 'admin') return <AdminDashboard />;
+                    if (user.role === 'manager') return <ManagerDashboard />;
+                    return <ChiefDashboard />;
+                  }}
+                </AuthContext.Consumer>
+              </ProtectedRoute>
+            } />
+            <Route path="/admin" element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/manager" element={
+              <ProtectedRoute allowedRoles={['manager']}>
+                <ManagerDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/chief" element={
+              <ProtectedRoute allowedRoles={['chief']}>
+                <ChiefDashboard />
+              </ProtectedRoute>
+            } />
+          </Route>
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 
