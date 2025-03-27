@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 function ExpenseForm({ addExpense }) {
   const [amount, setAmount] = useState('');
@@ -7,14 +8,26 @@ function ExpenseForm({ addExpense }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addExpense({ amount, date, category });
+    
+    // Protección contra addExpense undefined
+    if (typeof addExpense !== 'function') {
+      console.error('addExpense no es una función');
+      return;
+    }
+
+    addExpense({ 
+      amount: Number(amount),
+      date,
+      category
+    });
+    
     setAmount('');
     setDate('');
     setCategory('');
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="expense-form">
       <input
         type="number"
         placeholder="Monto"
@@ -39,5 +52,9 @@ function ExpenseForm({ addExpense }) {
     </form>
   );
 }
+
+ExpenseForm.propTypes = {
+  addExpense: PropTypes.func.isRequired
+};
 
 export default ExpenseForm;
