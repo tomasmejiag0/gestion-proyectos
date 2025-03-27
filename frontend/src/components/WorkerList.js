@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function WorkerList({ workers, addWorker }) {
+function WorkerList({ workers = [], addWorker }) {
   const [name, setName] = useState('');
 
   const handleSubmit = (e) => {
@@ -22,7 +22,7 @@ function WorkerList({ workers, addWorker }) {
         <button type="submit">Agregar Trabajador</button>
       </form>
       <ul>
-        {workers.map(worker => (
+        {workers?.map(worker => (
           <li key={worker.id}>{worker.name}</li>
         ))}
       </ul>

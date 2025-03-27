@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 function IncomeForm({ addIncome }) {
   const [amount, setAmount] = useState('');
@@ -7,14 +8,26 @@ function IncomeForm({ addIncome }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addIncome({ amount, date, category });
+    
+    // Verificación de addIncome
+    if (typeof addIncome !== 'function') {
+      console.error('addIncome no es una función');
+      return;
+    }
+
+    addIncome({ 
+      amount: Number(amount),
+      date,
+      category
+    });
+    
     setAmount('');
     setDate('');
     setCategory('');
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="income-form">
       <input
         type="number"
         placeholder="Monto"
@@ -39,5 +52,9 @@ function IncomeForm({ addIncome }) {
     </form>
   );
 }
+
+IncomeForm.propTypes = {
+  addIncome: PropTypes.func.isRequired
+};
 
 export default IncomeForm;

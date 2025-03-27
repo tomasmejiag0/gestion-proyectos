@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
+import './App.css';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -12,7 +13,7 @@ function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await login(email, password);
+      await login(email);
       navigate('/');
     } catch (err) {
       setError(err.message);
