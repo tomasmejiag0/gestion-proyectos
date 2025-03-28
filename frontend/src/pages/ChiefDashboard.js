@@ -4,7 +4,7 @@ import TaskList from '../components/TaskList';
 
 function ChiefDashboard() {
   return (
-    <div>
+    <div className="dashboard-container">
       <h1>Panel de Jefe de Obra</h1>
       <div className="section">
         <h2>Gestión de Tareas</h2>

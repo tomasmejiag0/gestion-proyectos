@@ -6,7 +6,7 @@ import ExpenseList from '../components/ExpenseList';
 
 function ManagerDashboard() {
   return (
-    <div>
+    <div className="dashboard-container">
       <h1>Panel de Gerente</h1>
       <div className="section">
         <h2>Registro de Ingresos</h2>

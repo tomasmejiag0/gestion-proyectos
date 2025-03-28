@@ -5,16 +5,30 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  const login = (email) => {
+  const login = (email, userType) => {
     let authenticatedUser;
-    
-    if (email === 'admin@c.com') {
-      authenticatedUser = { email, role: 'admin', name: 'Administrador' };
-    } else if (email === 'gerente@c.com') {
-      authenticatedUser = { email, role: 'manager', name: 'Gerente de Proyecto' };
-    } else if (email === 'jefe@c.com') {
-      authenticatedUser = { email, role: 'chief', name: 'Jefe de Obra' };
-    } else {
+
+    switch (userType) {
+      case 'admin':
+        if (email === 'admin@c.com') {
+          authenticatedUser = { email, role: 'admin', name: 'Administrador' };
+        }
+        break;
+      case 'worker':
+        if (email === 'worker@c.com') {
+          authenticatedUser = { email, role: 'worker', name: 'Trabajador' };
+        }
+        break;
+      case 'owner':
+        if (email === 'owner@c.com') {
+          authenticatedUser = { email, role: 'owner', name: 'Propietario' };
+        }
+        break;
+      default:
+        throw new Error('Credenciales inválidas');
+    }
+
+    if (!authenticatedUser) {
       throw new Error('Credenciales inválidas');
     }
 

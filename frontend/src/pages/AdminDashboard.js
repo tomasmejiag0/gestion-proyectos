@@ -5,7 +5,7 @@ import WorkerList from '../components/WorkerList';
 
 function AdminDashboard() {
   return (
-    <div>
+    <div className="dashboard-container">
       <h1>Panel de Administrador</h1>
       <div className="section">
         <h2>Gestión de Proyectos</h2>

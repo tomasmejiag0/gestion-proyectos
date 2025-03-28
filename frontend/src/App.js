@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
-import LoginPage from './LoginPage';
+import LoginPage from './pages/LoginPage';
 import AdminDashboard from './pages/AdminDashboard';
 import ManagerDashboard from './pages/ManagerDashboard';
 import ChiefDashboard from './pages/ChiefDashboard';
